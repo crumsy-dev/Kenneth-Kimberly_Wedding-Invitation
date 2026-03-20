@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Kenneth and Kimberly Wedding Invitation</title>
+    <meta
+      name="description"
+      content="You are invited to celebrate the wedding of Kenneth and Kimberly."
+    />
+
+    <meta
+      property="og:title"
+      content="Kenneth and Kimberly Wedding Invitation"
+    />
+    <meta
+      property="og:description"
+      content="You are invited to celebrate the wedding of Kenneth and Kimberly."
+    />
+    <meta
+      property="og:image"
+      content="https://yourusername.github.io/kenneth-kimberly-wedding-invitation/preview.jpg"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://yourusername.github.io/kenneth-kimberly-wedding-invitation/"
+    />
+    <meta
+      property="og:site_name"
+      content="Kenneth and Kimberly Wedding Invitation"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Kenneth and Kimberly Wedding Invitation"
+    />
+    <meta
+      name="twitter:description"
+      content="You are invited to celebrate the wedding of Kenneth and Kimberly."
+    />
+    <meta
+      name="twitter:image"
+      content="https://yourusername.github.io/kenneth-kimberly-wedding-invitation/preview.jpg"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>You're Invited!</h1>
+      <div id="countdown">
+        <div class="countdown-item">
+          <span id="months">00</span>
+          <span class="label">Months</span>
+        </div>
+        <div class="countdown-item">
+          <span id="days">00</span>
+          <span class="label">Days</span>
+        </div>
+        <div class="countdown-item">
+          <span id="hours">00</span>
+          <span class="label">Hours</span>
+        </div>
+        <div class="countdown-item">
+          <span id="minutes">00</span>
+          <span class="label">Minutes</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <img src="1.png" alt="Image 1" />
+      <img src="2.png" alt="Image 2" />
+      <img src="3.png" alt="Image 3" />
+      <img src="4.png" alt="Image 4" />
+      <img src="5.png" alt="Image 5" />
+    </div>
+
+    <!-- Music -->
+    <audio id="music" loop>
+      <source src="instrumental.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <script>
+      const audio = document.getElementById("music");
+
+      // Try to autoplay when page loads
+      window.addEventListener("load", () => {
+        audio.muted = true;
+        audio.play().catch(() => console.log("Autoplay blocked"));
+      });
+
+      // Allow unmuting on any user interaction
+      document.addEventListener("click", () => {
+        audio.muted = false;
+        audio
+          .play()
+          .catch((error) => console.log("Play error:", error.message));
+      });
+
+      // Log any errors loading the audio
+      audio.addEventListener("error", (e) => {
+        console.error("Audio loading error:", audio.error);
+      });
+
+      // Countdown Timer
+      function updateCountdown() {
+        const targetDate = new Date("2026-10-24T14:00:00").getTime();
+        const now = new Date().getTime();
+        const timeLeft = targetDate - now;
+
+        if (timeLeft > 0) {
+          const months = Math.floor(timeLeft / (1000 * 60 * 60 * 24 * 30.44));
+          const days = Math.floor(
+            (timeLeft % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24),
+          );
+          const hours = Math.floor(
+            (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const minutes = Math.floor(
+            (timeLeft % (1000 * 60 * 60)) / (1000 * 60),
+          );
+
+          document.getElementById("months").textContent = months
+            .toString()
+            .padStart(2, "0");
+          document.getElementById("days").textContent = days
+            .toString()
+            .padStart(2, "0");
+          document.getElementById("hours").textContent = hours
+            .toString()
+            .padStart(2, "0");
+          document.getElementById("minutes").textContent = minutes
+            .toString()
+            .padStart(2, "0");
+        } else {
+          document.getElementById("countdown").innerHTML =
+            '<div class="countdown-item"><span>The big day is here!</span></div>';
+        }
+      }
+
+      // Update countdown every minute
+      updateCountdown();
+      setInterval(updateCountdown, 60000);
+    </script>
+  </body>
+</html>
