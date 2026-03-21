@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kenneth and Kimberly Wedding</title>
   
-  <meta property="og:title" content="Kenneth & Kimberly" />
+  <meta property="og:title" content="Kenneth & Kimberly Wedding Invitation" />
   <meta property="og:description" content="You're invited! October 24, 2026." />
   <meta property="og:image" content="https://kenneth-kimberly-wedding-invitation.vercel.app/preview.jpg" />
   <meta property="og:url" content="https://kenneth-kimberly-wedding-invitation.vercel.app/" />
@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <button id="music-control" class="music-btn">🎵 Play Music</button>
+
   <header>
     <h1>You're Invited!</h1>
     
@@ -38,7 +40,7 @@
     </div>
 
     <div class="calendar-wrapper">
-      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Kenneth+and+Kimberly+Wedding&dates=20261024T140000Z/20261024T170000Z&details=You+are+cordially+invited+to+celebrate+the+wedding+of+Kenneth+and+Kimberly!&location=Please+check+invitation+for+details" 
+      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Kenneth+and+Kimberly+Wedding&dates=20261024T140000/20261024T150000&details=You+are+cordially+invited+to+celebrate+the+wedding+of+Kenneth+and+Kimberly!&location=Please+check+invitation+for+details" 
          target="_blank" 
          class="calendar-btn">
          📅 Add to Google Calendar
@@ -54,29 +56,38 @@
     <img src="5.png" alt="Image 5" />
   </div>
 
-  <audio id="music" loop>
+  <audio id="music" loop preload="auto">
     <source src="instrumental.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
     const audio = document.getElementById("music");
-    let hasInteracted = false;
+    const musicBtn = document.getElementById("music-control");
 
-    // Music triggers on first click or scroll
-    const startMusic = () => {
-      if (!hasInteracted) {
-        audio.muted = false;
-        audio.play().catch(e => console.log("Waiting for interaction..."));
-        hasInteracted = true;
-        document.removeEventListener("click", startMusic);
-        window.removeEventListener("scroll", startMusic);
+    // Improved Mobile Audio Logic
+    musicBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play().then(() => {
+          musicBtn.innerHTML = "⏸ Stop Music";
+        }).catch(err => console.log("Playback failed"));
+      } else {
+        audio.pause();
+        musicBtn.innerHTML = "🎵 Play Music";
       }
+    });
+
+    // Auto-try on first scroll (some browsers allow this if muted)
+    const tryAutoPlay = () => {
+      audio.play().then(() => {
+        musicBtn.innerHTML = "⏸ Stop Music";
+        window.removeEventListener("scroll", tryAutoPlay);
+      }).catch(() => {
+        // If it fails, we wait for the button click
+      });
     };
+    window.addEventListener("scroll", tryAutoPlay, { passive: true });
 
-    document.addEventListener("click", startMusic);
-    window.addEventListener("scroll", startMusic, { passive: true });
-
-    // Countdown logic
+    // Countdown Logic
     function updateCountdown() {
       const targetDate = new Date("2026-10-24T14:00:00").getTime();
       const now = new Date().getTime();
