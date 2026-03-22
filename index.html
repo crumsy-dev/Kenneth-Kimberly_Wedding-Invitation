@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <button id="music-control" class="music-btn">🎵 Play Music</button>
 
   <header>
     <h1>You're Invited!</h1>
@@ -45,6 +44,8 @@
          class="calendar-btn">
          📅 Add to Google Calendar
       </a>
+      
+      <button id="music-control" class="music-btn-inline">🎵 Play Music</button>
     </div>
   </header>
 
@@ -63,9 +64,11 @@
   <script>
     const audio = document.getElementById("music");
     const musicBtn = document.getElementById("music-control");
+    let hasInteracted = false;
 
-    // Improved Mobile Audio Logic
+    // Toggle Play/Pause on Click
     musicBtn.addEventListener("click", () => {
+      hasInteracted = true; // Mark that user interacted
       if (audio.paused) {
         audio.play().then(() => {
           musicBtn.innerHTML = "⏸ Stop Music";
@@ -76,14 +79,17 @@
       }
     });
 
-    // Auto-try on first scroll (some browsers allow this if muted)
+    // Auto-try on first scroll
     const tryAutoPlay = () => {
-      audio.play().then(() => {
-        musicBtn.innerHTML = "⏸ Stop Music";
-        window.removeEventListener("scroll", tryAutoPlay);
-      }).catch(() => {
-        // If it fails, we wait for the button click
-      });
+      if (!hasInteracted) {
+        audio.play().then(() => {
+          musicBtn.innerHTML = "⏸ Stop Music";
+          hasInteracted = true;
+          window.removeEventListener("scroll", tryAutoPlay);
+        }).catch(() => {
+          // If browser still blocks it, we just wait for the button click
+        });
+      }
     };
     window.addEventListener("scroll", tryAutoPlay, { passive: true });
 
