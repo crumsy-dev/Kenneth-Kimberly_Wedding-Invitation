@@ -36,6 +36,10 @@
         <span id="minutes">00</span>
         <span class="label">Minutes</span>
       </div>
+      <div class="countdown-item">
+        <span id="seconds">00</span>
+        <span class="label">Seconds</span>
+      </div>
     </div>
 
     <div class="calendar-wrapper">
@@ -66,9 +70,9 @@
     const musicBtn = document.getElementById("music-control");
     let hasInteracted = false;
 
-    // Toggle Play/Pause on Click
+    // Music Control
     musicBtn.addEventListener("click", () => {
-      hasInteracted = true; // Mark that user interacted
+      hasInteracted = true;
       if (audio.paused) {
         audio.play().then(() => {
           musicBtn.innerHTML = "⏸ Stop Music";
@@ -79,21 +83,18 @@
       }
     });
 
-    // Auto-try on first scroll
     const tryAutoPlay = () => {
       if (!hasInteracted) {
         audio.play().then(() => {
           musicBtn.innerHTML = "⏸ Stop Music";
           hasInteracted = true;
           window.removeEventListener("scroll", tryAutoPlay);
-        }).catch(() => {
-          // If browser still blocks it, we just wait for the button click
-        });
+        }).catch(() => {});
       }
     };
     window.addEventListener("scroll", tryAutoPlay, { passive: true });
 
-    // Countdown Logic
+    // Countdown Logic with Seconds
     function updateCountdown() {
       const targetDate = new Date("2026-10-24T14:00:00").getTime();
       const now = new Date().getTime();
@@ -104,17 +105,21 @@
         const days = Math.floor((timeLeft % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
         const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
         document.getElementById("months").textContent = months.toString().padStart(2, "0");
         document.getElementById("days").textContent = days.toString().padStart(2, "0");
         document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
         document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+        document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
       } else {
         document.getElementById("countdown").innerHTML = "<span>The big day is here!</span>";
       }
     }
+    
+    // Update every 1 second (1000ms) for smooth ticking
     updateCountdown();
-    setInterval(updateCountdown, 60000);
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
