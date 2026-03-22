@@ -41,16 +41,6 @@
         <span class="label">Seconds</span>
       </div>
     </div>
-
-    <div class="calendar-wrapper">
-      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Kenneth+and+Kimberly+Wedding&dates=20261024T140000/20261024T150000&details=You+are+cordially+invited+to+celebrate+the+wedding+of+Kenneth+and+Kimberly!&location=Please+check+invitation+for+details" 
-         target="_blank" 
-         class="calendar-btn">
-         📅 Add to Google Calendar
-      </a>
-      
-      <button id="music-control" class="music-btn-inline">🎵 Play Music</button>
-    </div>
   </header>
 
   <div class="container">
@@ -67,34 +57,29 @@
 
   <script>
     const audio = document.getElementById("music");
-    const musicBtn = document.getElementById("music-control");
     let hasInteracted = false;
 
-    // Music Control
-    musicBtn.addEventListener("click", () => {
-      hasInteracted = true;
-      if (audio.paused) {
-        audio.play().then(() => {
-          musicBtn.innerHTML = "⏸ Stop Music";
-        }).catch(err => console.log("Playback failed"));
-      } else {
-        audio.pause();
-        musicBtn.innerHTML = "🎵 Play Music";
-      }
-    });
-
-    const tryAutoPlay = () => {
+    // Function to start music
+    const startMusic = () => {
       if (!hasInteracted) {
         audio.play().then(() => {
-          musicBtn.innerHTML = "⏸ Stop Music";
           hasInteracted = true;
-          window.removeEventListener("scroll", tryAutoPlay);
-        }).catch(() => {});
+          // Remove listeners once music starts
+          window.removeEventListener("scroll", startMusic);
+          document.removeEventListener("click", startMusic);
+          document.removeEventListener("touchstart", startMusic);
+        }).catch(err => {
+          console.log("Waiting for user interaction to play audio...");
+        });
       }
     };
-    window.addEventListener("scroll", tryAutoPlay, { passive: true });
 
-    // Countdown Logic with Seconds
+    // Listen for scroll, click, or touch (mobile)
+    window.addEventListener("scroll", startMusic, { passive: true });
+    document.addEventListener("click", startMusic);
+    document.addEventListener("touchstart", startMusic);
+
+    // Countdown Logic
     function updateCountdown() {
       const targetDate = new Date("2026-10-24T14:00:00").getTime();
       const now = new Date().getTime();
@@ -117,7 +102,6 @@
       }
     }
     
-    // Update every 1 second (1000ms) for smooth ticking
     updateCountdown();
     setInterval(updateCountdown, 1000);
   </script>
