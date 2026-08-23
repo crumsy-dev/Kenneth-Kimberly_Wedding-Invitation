@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kenneth and Kimberly Wedding</title>
+  
+  <meta property="og:title" content="Kenneth & Kimberly Wedding Invitation" />
+  <meta property="og:description" content="You're invited! October 24, 2026." />
+  <meta property="og:image" content="https://kenneth-kimberly-wedding-invitation.vercel.app/preview.jpg" />
+  <meta property="og:url" content="https://kenneth-kimberly-wedding-invitation.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Wedding Invitation" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header>
+    <h1>You're Invited!</h1>
+    
+    <div id="countdown">
+      <div class="countdown-item">
+        <span id="months">00</span>
+        <span class="label">Months</span>
+      </div>
+      <div class="countdown-item">
+        <span id="days">00</span>
+        <span class="label">Days</span>
+      </div>
+      <div class="countdown-item">
+        <span id="hours">00</span>
+        <span class="label">Hours</span>
+      </div>
+      <div class="countdown-item">
+        <span id="minutes">00</span>
+        <span class="label">Minutes</span>
+      </div>
+      <div class="countdown-item">
+        <span id="seconds">00</span>
+        <span class="label">Seconds</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <img src="1.png" alt="Image 1" />
+
+    <section class="prenup-gallery">
+      <div class="prenup-large image-placeholder" role="img" aria-label="Large prenup photo placeholder">
+        Add large prenup photo
+      </div>
+      <div class="prenup-small-row">
+        <div class="prenup-small image-placeholder" role="img" aria-label="First small prenup photo placeholder">
+          Add small prenup photo
+        </div>
+        <div class="prenup-small image-placeholder" role="img" aria-label="Second small prenup photo placeholder">
+          Add small prenup photo
+        </div>
+      </div>
+    </section>
+
+    <img src="2.png" alt="Image 2" />
+    <img src="3.png" alt="Image 3" />
+    <img src="4.png" alt="Image 4" />
+    <img src="5.png" alt="Image 5" />
+  </div>
+
+  <audio id="music" loop preload="auto">
+    <source src="instrumental.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const audio = document.getElementById("music");
+    let hasInteracted = false;
+
+    // Function to start music
+    const startMusic = () => {
+      if (!hasInteracted) {
+        audio.play().then(() => {
+          hasInteracted = true;
+          // Remove listeners once music starts
+          window.removeEventListener("scroll", startMusic);
+          document.removeEventListener("click", startMusic);
+          document.removeEventListener("touchstart", startMusic);
+        }).catch(err => {
+          console.log("Waiting for user interaction to play audio...");
+        });
+      }
+    };
+
+    // Listen for scroll, click, or touch (mobile)
+    window.addEventListener("scroll", startMusic, { passive: true });
+    document.addEventListener("click", startMusic);
+    document.addEventListener("touchstart", startMusic);
+
+    // Countdown Logic
+    function updateCountdown() {
+      const targetDate = new Date(2026, 9, 28, 14, 0, 0);
+      const now = new Date();
+      const timeLeft = targetDate.getTime() - now.getTime();
+
+      if (timeLeft > 0) {
+        let months = 0;
+        const monthCursor = new Date(now);
+
+        while (true) {
+          const nextMonth = new Date(monthCursor);
+          nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+          if (nextMonth > targetDate) {
+            break;
+          }
+
+          monthCursor.setTime(nextMonth.getTime());
+          months++;
+        }
+
+        const remainingTime = targetDate.getTime() - monthCursor.getTime();
+        const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+        const remainingDayTime = remainingTime % (1000 * 60 * 60 * 24);
+        const hours = Math.floor(remainingDayTime / (1000 * 60 * 60));
+        const minutes = Math.floor((remainingDayTime % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remainingDayTime % (1000 * 60)) / 1000);
+
+        document.getElementById("months").textContent = months.toString().padStart(2, "0");
+        document.getElementById("days").textContent = days.toString().padStart(2, "0");
+        document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+        document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+        document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
+      } else {
+        document.getElementById("countdown").innerHTML = "<span>The big day is here!</span>";
+      }
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
