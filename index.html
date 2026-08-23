@@ -16,6 +16,24 @@
 </head>
 <body>
 
+  <section class="mail-intro" aria-label="Open wedding invitation">
+    <div class="envelope-wrap">
+      <div class="envelope-title" aria-label="The Wedding of Ken and Kim">
+        <span>The Wedding of</span>
+        <strong>Ken &amp; Kim</strong>
+      </div>
+      <div class="envelope" role="button" tabindex="0" aria-label="Open wedding invitation">
+        <div class="envelope-letter">
+          <span>With love</span>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-front"></div>
+        <button id="open-invitation" class="envelope-seal" type="button" aria-label="Open wedding invitation"></button>
+      </div>
+      <div class="envelope-hint">Click to open</div>
+    </div>
+  </section>
+
   <header>
     <h1>You're Invited!</h1>
     
@@ -43,34 +61,54 @@
     </div>
   </header>
 
-  <div class="container">
-    <img src="1.png" alt="Image 1" />
-
-    <section class="prenup-gallery">
-      <div class="prenup-large image-placeholder" role="img" aria-label="Large prenup photo placeholder">
-        Add large prenup photo
-      </div>
-      <div class="prenup-small-row">
-        <div class="prenup-small image-placeholder" role="img" aria-label="First small prenup photo placeholder">
-          Add small prenup photo
-        </div>
-        <div class="prenup-small image-placeholder" role="img" aria-label="Second small prenup photo placeholder">
-          Add small prenup photo
-        </div>
-      </div>
-    </section>
+  <main id="invitation-content" class="container">
+    <img id="first-invitation-image" src="1.png" alt="Image 1" />
+    <img src="page2pics.png" alt="Invitation page 2 photos" />
 
     <img src="2.png" alt="Image 2" />
     <img src="3.png" alt="Image 3" />
+    <img class="scattered-polars" src="scatteredpolaroids.png" alt="Scattered polaroids design" />
     <img src="4.png" alt="Image 4" />
     <img src="5.png" alt="Image 5" />
-  </div>
+    <section class="locations-section" aria-label="Wedding locations">
+      <img src="locationsqr.png" alt="Ceremony and reception locations with QR codes" />
+      <div class="map-links">
+        <a href="https://www.google.com/maps/place/Christ+The+King+Cathedral/@6.4982808,124.8397035,16.5z/data=!4m6!3m5!1s0x32f818eb1c6872d3:0xd19668d0aa21826c!8m2!3d6.4982669!4d124.8420307!16s%2Fg%2F1pzprc0x3?entry=ttu&amp;g_ep=EgoyMDI2MDgxOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">View Map</a>
+        <a href="https://www.google.com/maps/place/Cinco+Ni%C3%B1as/@6.5077737,124.8328842,17z/data=!4m14!1m7!3m6!1s0x32f818f42dd7d20f:0x435bc590e4f300da!2sCinco+Ni%C3%B1as!8m2!3d6.5077684!4d124.8354591!16s%2Fg%2F1tf7d5yq!3m5!1s0x32f818f42dd7d20f:0x435bc590e4f300da!8m2!3d6.5077684!4d124.8354591!16s%2Fg%2F1tf7d5yq?entry=ttu&amp;g_ep=EgoyMDI2MDgxOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">View Map</a>
+      </div>
+    </section>
+    <section class="thank-you-section" aria-label="Thank you">
+      <img src="thank-you.jpg" alt="Thank you" />
+      <p>Thank You!</p>
+    </section>
+  </main>
 
   <audio id="music" loop preload="auto">
     <source src="instrumental.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
+    const mailIntro = document.querySelector(".mail-intro");
+    const envelope = document.querySelector(".envelope");
+    const invitationContent = document.getElementById("invitation-content");
+
+    const openEnvelope = () => {
+      envelope.classList.add("is-open");
+      mailIntro.classList.add("is-open");
+
+      window.setTimeout(() => {
+        invitationContent.classList.add("is-visible");
+      }, 450);
+    };
+
+    envelope.addEventListener("click", openEnvelope);
+    envelope.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openEnvelope();
+      }
+    });
+
     const audio = document.getElementById("music");
     let hasInteracted = false;
 
